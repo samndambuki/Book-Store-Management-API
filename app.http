@@ -1,0 +1,11 @@
+### Create a new book ###
+POST http://localhost:3000/api/books
+Content-Type: application/json
+
+{
+  "title": "Sample Book 2",
+  "author": "Sam Ndambuki"
+}
+
+### Get all books ###
+GET http://localhost:3000/api/books
