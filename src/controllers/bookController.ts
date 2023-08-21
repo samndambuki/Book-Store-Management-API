@@ -12,16 +12,22 @@ export const createBook = async (req: Request, res: Response) => {
   try {
     //detsructuring data properties from req.body object
     //req.body holds data sent in the request body
-    const { title, author } = req.body;
+    const { title, author,price,quantity_in_stock, description, published_year, genre  } = req.body;
     //create an sql query string using a template literal
-    const query = `INSERT INTO books (title, author) VALUES (@title, @author)`;
+    const query = ` INSERT INTO books (title, author, price, quantity_in_stock, description, published_year, genre)
+    VALUES (@title, @author, @price, @quantity_in_stock, @description, @published_year, @genre)`;
 
     //send the sql query to database
     //result of the query is stored in result variable
     const result = await pool
       .request()
-      .input("title", title)
-      .input("author", author)
+      .input('title', title)
+      .input('author', author)
+      .input('price', price)
+      .input('quantity_in_stock', quantity_in_stock)
+      .input('description', description)
+      .input('published_year', published_year)
+      .input('genre', genre)
       .query(query);
 
     //201  - successful creation
