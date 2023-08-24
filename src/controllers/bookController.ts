@@ -12,7 +12,15 @@ export const createBook = async (req: Request, res: Response) => {
   try {
     //detsructuring data properties from req.body object
     //req.body holds data sent in the request body
-    const { title, author,price,quantity_in_stock, description, published_year, genre  } = req.body;
+    const {
+      title,
+      author,
+      price,
+      quantity_in_stock,
+      description,
+      published_year,
+      genre,
+    } = req.body;
     //create an sql query string using a template literal
     const query = ` INSERT INTO books (title, author, price, quantity_in_stock, description, published_year, genre)
     VALUES (@title, @author, @price, @quantity_in_stock, @description, @published_year, @genre)`;
@@ -21,13 +29,13 @@ export const createBook = async (req: Request, res: Response) => {
     //result of the query is stored in result variable
     const result = await pool
       .request()
-      .input('title', title)
-      .input('author', author)
-      .input('price', price)
-      .input('quantity_in_stock', quantity_in_stock)
-      .input('description', description)
-      .input('published_year', published_year)
-      .input('genre', genre)
+      .input("title", title)
+      .input("author", author)
+      .input("price", price)
+      .input("quantity_in_stock", quantity_in_stock)
+      .input("description", description)
+      .input("published_year", published_year)
+      .input("genre", genre)
       .query(query);
 
     //201  - successful creation
@@ -61,5 +69,35 @@ export const getAllBooks = async (req: Request, res: Response) => {
     console.error("Error fetching books:", error);
     //500 - internal server error
     res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+//Get one book
+
+//define an exported asynchrnonous function
+export const getBookById = async (req: Request, res: Response) => {
+  try {
+    //retreive id from request url parameters and stores it in the bookId variable
+    const bookId = req.params.id;
+    
+    //select books where the id matches the proided bookId
+    const query = `SELECT * FROM books WHERE id = @bookId`;
+    //sends query using the connection pools request() method
+    //provides bookId as a parameter to teh query
+    const result = await pool.request().input("bookId", bookId).query(query);
+
+    //extract first record 
+    const book = result.recordset[0];
+
+    //if book is not found
+    if (!book) {
+      return res.status(400).json({ message: "Book not found" });
+    }
+    //if found, returns book info in json format
+    res.status(200).json(book);
+  } catch (error) {
+    console.error("Error getting book", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
