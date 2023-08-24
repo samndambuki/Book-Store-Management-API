@@ -8,7 +8,7 @@ import { RegistrationData } from "../models/RegitsrationData";
 export const registerUser = async (req: Request, res: Response) => {
   try {
     //desctructuring to extract userName, email and password from the request body
-    const { username, email, password }: RegistrationData = req.body;
+    const { username, email, password,role }: RegistrationData = req.body;
     //bcrypt - used for hashing
     //10 - determines complexity of hashing algorithm
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -18,10 +18,12 @@ export const registerUser = async (req: Request, res: Response) => {
       .request()
       .input("username", username)
       .input("email", email)
-      .input("password", hashedPassword);
+      .input("password", hashedPassword)
+      //set a default role if not provided
+      .input("role",role || "user")
 
     //query to insert user data into users table
-    const query = `INSERT INTO users(username,email,password) VALUES (@username,@email,@password)`;
+    const query = `INSERT INTO users(username,email,password,role) VALUES (@username,@email,@password,@role)`;
 
     //execute the query using the request object
     await request.query(query);
@@ -34,3 +36,5 @@ export const registerUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+

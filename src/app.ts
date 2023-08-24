@@ -2,6 +2,7 @@
 import cors from "cors";
 import express from "express";
 import bookRoutes from "./routes/bookRoutes";
+import userRoutes from "./routes/userRoutes";
 
 //initialize an instance of the express application
 const app = express();
@@ -16,6 +17,9 @@ app.use(express.json());
 
 // Use the bookRoutes
 app.use("/api", bookRoutes);
+
+//use userRoutes
+app.use("/api",userRoutes)
 
 //allows you specify port number through environment variables
 const PORT = process.env.PORT || 3000;
