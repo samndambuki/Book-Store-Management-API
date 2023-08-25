@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import bookRoutes from "./routes/bookRoutes";
 import userRoutes from "./routes/userRoutes";
+import authMiddleware from "./middlewares/authMiddleware";
 
 //initialize an instance of the express application
 const app = express();
@@ -20,6 +21,10 @@ app.use("/api", bookRoutes);
 
 //use userRoutes
 app.use("/api",userRoutes)
+
+app.get('/api/protected', authMiddleware, (req, res) => {
+  res.json({ message: 'This is a protected route' });
+});
 
 //allows you specify port number through environment variables
 const PORT = process.env.PORT || 3000;

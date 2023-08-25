@@ -3,6 +3,7 @@
 ### Create a new book ###
 POST http://localhost:3000/api/books
 Content-Type: application/json
+auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjkyOTU5NDQ4LCJleHAiOjE2OTI5NjMwNDh9.jguW6rXevrKh5xTD0dEqANrDVRl9N3l_S5JBnpwpON7
 
 {
  "title": "Sample Book 2",
