@@ -80,6 +80,11 @@ Content-Type: application/json
 }
 
 
+###Get all customers ###
+GET http://localhost:3000/api/customers
+
+
+
 
 
 
