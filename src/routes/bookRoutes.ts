@@ -1,6 +1,6 @@
 // routes/bookRoutes.ts - sets up routes related to books
 import express from "express";
-import { createBook, getAllBooks, getBookById } from "../controllers/bookController";
+import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from "../controllers/bookController";
 
 //create an instance of the express router
 //router object will be used to define routes for the application
@@ -20,6 +20,13 @@ router.get("/books", getAllBooks);
 
 //get single book by id
 router.get("/books/:id",getBookById)
+
+//update a single book
+router.put("/books/:id",updateBook)
+
+//delete a single book
+router.delete("/books/:id",deleteBook)
+
 
 //export the router object so that it can be imported and used in other parts of the application
 export default router;

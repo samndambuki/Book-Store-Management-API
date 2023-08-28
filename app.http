@@ -3,7 +3,7 @@
 ### Create a new book ###
 POST http://localhost:3000/api/books
 Content-Type: application/json
-auth-token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNjkyOTU5NDQ4LCJleHAiOjE2OTI5NjMwNDh9.jguW6rXevrKh5xTD0dEqANrDVRl9N3l_S5JBnpwpON7
+auth-token:
 
 {
  "title": "Sample Book 2",
@@ -43,6 +43,27 @@ Content-Type: application/json
   "email":"testing@gmail.com",
   "password":"N10234424008s"
 }
+
+
+###update a single book ###
+PUT http://localhost:3000/api/books/1
+Content-Type: application/json
+
+{
+  
+ "title": "Sample Book 2",
+  "author": "Samuel Ndambuki",
+  "price": 29.99,
+  "quantity_in_stock": 50,
+  "description": "An example book 1",
+  "published_year": 2023,
+  "genre": "Fiction"
+}
+
+###DELETE a single book ###
+DELETE http://localhost:3000/api/books/1
+
+
 
 
 

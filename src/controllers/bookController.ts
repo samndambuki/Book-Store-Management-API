@@ -1,5 +1,5 @@
 // controllers/bookController.ts
-import { Request, Response, query } from "express";
+import { Request, Response } from "express";
 import pool from "../db";
 import { Book } from "../models/Book";
 import authMiddleware from "../middlewares/authMiddleware";
@@ -14,7 +14,7 @@ export const createBook = async (req: Request, res: Response) => {
     //detsructuring data properties from req.body object
     //req.body holds data sent in the request body
 
-    authMiddleware(req,res,async()=>{
+    authMiddleware(req, res, async () => {
       const {
         title,
         author,
@@ -27,7 +27,7 @@ export const createBook = async (req: Request, res: Response) => {
       //create an sql query string using a template literal
       const query = ` INSERT INTO books (title, author, price, quantity_in_stock, description, published_year, genre)
       VALUES (@title, @author, @price, @quantity_in_stock, @description, @published_year, @genre)`;
-  
+
       //send the sql query to database
       //result of the query is stored in result variable
       const result = await pool
@@ -40,11 +40,10 @@ export const createBook = async (req: Request, res: Response) => {
         .input("published_year", published_year)
         .input("genre", genre)
         .query(query);
-  
+
       //201  - successful creation
       res.status(201).json({ message: "Book created successfully" });
-    })
-   
+    });
   } catch (error) {
     console.error("Error creating book:", error);
     //500 - Internal server error
@@ -77,7 +76,6 @@ export const getAllBooks = async (req: Request, res: Response) => {
   }
 };
 
-
 //Get one book
 
 //define an exported asynchrnonous function
@@ -85,14 +83,14 @@ export const getBookById = async (req: Request, res: Response) => {
   try {
     //retreive id from request url parameters and stores it in the bookId variable
     const bookId = req.params.id;
-    
+
     //select books where the id matches the proided bookId
     const query = `SELECT * FROM books WHERE id = @bookId`;
     //sends query using the connection pools request() method
     //provides bookId as a parameter to teh query
     const result = await pool.request().input("bookId", bookId).query(query);
 
-    //extract first record 
+    //extract first record
     const book = result.recordset[0];
 
     //if book is not found
@@ -103,6 +101,62 @@ export const getBookById = async (req: Request, res: Response) => {
     res.status(200).json(book);
   } catch (error) {
     console.error("Error getting book", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateBook = async (req: Request, res: Response) => {
+  try {
+    //get book id from the request parameters
+    const bookId = req.params.id;
+    //get updated book data from the request body
+    const {
+      title,
+      author,
+      price,
+      quantity_in_stock,
+      description,
+      published_year,
+      genre,
+    } = req.body;
+    //query
+    const query = `UPDATE books SET title=@title,author=@author,price=@price,quantity_in_stock=@quantity_in_stock,
+    description=@description,published_year=@published_year,genre=@genre WHERE id=@bookId`;
+    const result = await pool
+      .request()
+      .input("title", title)
+      .input("author", author)
+      .input("price", price)
+      .input("quantity_in_stock", quantity_in_stock)
+      .input("description", description)
+      .input("published_year", published_year)
+      .input("genre", genre)
+      .input("bookId", bookId)
+      .query(query);
+
+    //if its 0 no books were found
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ message: "Book not found" });
+    }
+    res.status(200).json({ message: "Book updated successfully" });
+  } catch (error) {
+    console.error("Error updating book", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteBook = async (req: Request, res: Response) => {
+  try {
+    const bookId = req.params.id;
+    const query = `DELETE FROM books WHERE id=@bookId`;
+    const result = await pool.request().input("bookId", bookId).query(query);
+    if (result.rowsAffected[0] === 0) {
+      return res.status(400).json({ message: "Book not found" });
+    }
+
+    res.status(200).json({ message: "Book deleted successfully" });
+  } catch (error) {
+    console.error("Error updating book", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
