@@ -4,6 +4,7 @@ import express from "express";
 import bookRoutes from "./routes/bookRoutes";
 import userRoutes from "./routes/userRoutes";
 import authMiddleware from "./middlewares/authMiddleware";
+import customerRoutes from "./routes/customerRoutes";
 
 //initialize an instance of the express application
 const app = express();
@@ -21,6 +22,9 @@ app.use("/api", bookRoutes);
 
 //use userRoutes
 app.use("/api",userRoutes)
+
+//customer routes
+app.use("/api",customerRoutes)
 
 app.get('/api/protected', authMiddleware, (req, res) => {
   res.json({ message: 'This is a protected route' });
