@@ -67,7 +67,7 @@ DELETE http://localhost:3000/api/books/1
 //END OF BOOK ENPOINTTS
 
 
-//CUSTOMER ENDPOINTS
+# CUSTOMER ENDPOINTS
 
 ###Create a customer###
 POST http://localhost:3000/api/customers
@@ -84,6 +84,27 @@ Content-Type: application/json
 GET http://localhost:3000/api/customers
 
 
+
+###Get customer by Id ###
+GET http://localhost:3000/api/customers/1
+
+
+###Update a customer ###
+PUT http://localhost:3000/api/customers/1
+Content-Type: application/json
+
+{
+  "name":"John Chege",
+  "email":"john@gmail.com",
+  "address":"Nyeri"
+}
+
+
+###Delete customer ###
+DELETE  http://localhost:3000/api/customers/1
+
+
+# END OF CUSTOMER ENDPOINTS
 
 
 
